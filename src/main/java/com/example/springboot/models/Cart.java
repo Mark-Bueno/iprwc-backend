@@ -9,9 +9,7 @@ public class Cart implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cateringorderid", columnDefinition = "serial")
     private int id;
-
 
     @ManyToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false, insertable = false)
