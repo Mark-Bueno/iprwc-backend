@@ -9,15 +9,16 @@ public class Cart implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false, insertable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 
-    @ManyToOne()
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false, updatable = false, insertable = false)
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(name = "amount")
@@ -53,5 +54,15 @@ public class Cart implements Serializable {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", user=" + user +
+                ", product=" + product +
+                ", amount=" + amount +
+                '}';
     }
 }

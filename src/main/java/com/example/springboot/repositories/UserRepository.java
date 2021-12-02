@@ -1,14 +1,13 @@
 package com.example.springboot.repositories;
 
-import com.example.springboot.models.Product;
+import com.example.springboot.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
-    Product findById(int id);
-
-    List<Product> findAll();
+public interface UserRepository extends JpaRepository<User, Integer> {
+    User findById(int id);
+    List<User> findAll();
 }

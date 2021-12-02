@@ -1,17 +1,23 @@
 package com.example.springboot.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "id")
+    public int id;
 
     @Column(name = "username")
-    public String name;
+    public String username;
 
     @Column(name = "password")
     public String password;
@@ -19,6 +25,8 @@ public class User {
     @Column(name = "role")
     public String role;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Cart> carts = new HashSet<>();
 
     public int getId() {
         return id;
@@ -28,12 +36,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -50,6 +58,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void addCart(Cart cart) {
+        if (cart != null) {
+            this.carts.add(cart);
+            cart.setUser(this);
+        }
     }
 
 

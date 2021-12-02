@@ -2,14 +2,18 @@ package com.example.springboot.models;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "id")
+    public int id;
 
     @Column(name = "name")
     public String name;
@@ -23,6 +27,8 @@ public class Product {
     @Column(name = "description")
     public String description;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private Set<Cart> carts = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -62,5 +68,12 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void addCart(Cart cart) {
+        if (cart != null) {
+            this.carts.add(cart);
+            cart.setProduct(this);
+        }
     }
 }
