@@ -16,7 +16,7 @@ public class User implements Serializable {
     @Column(name = "id")
     public int id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique=true)
     public String username;
 
     @Column(name = "password")
@@ -24,9 +24,6 @@ public class User implements Serializable {
 
     @Column(name = "role")
     public String role;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Cart> carts = new HashSet<>();
 
     public int getId() {
         return id;
@@ -58,13 +55,6 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public void addCart(Cart cart) {
-        if (cart != null) {
-            this.carts.add(cart);
-            cart.setUser(this);
-        }
     }
 
 

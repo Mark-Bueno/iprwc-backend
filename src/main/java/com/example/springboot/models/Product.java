@@ -27,9 +27,6 @@ public class Product implements Serializable {
     @Column(name = "description")
     public String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Set<Cart> carts = new HashSet<>();
-
     public Integer getId() {
         return id;
     }
@@ -70,10 +67,4 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public void addCart(Cart cart) {
-        if (cart != null) {
-            this.carts.add(cart);
-            cart.setProduct(this);
-        }
-    }
 }

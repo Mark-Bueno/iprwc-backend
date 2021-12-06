@@ -7,10 +7,7 @@ import com.example.springboot.repositories.CartRepository;
 import com.example.springboot.repositories.ProductRepository;
 import com.example.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,27 +46,29 @@ public class CartController {
 
     @PostMapping(value = "/api/carts/users/{userId}/products/{productId}")
     public Cart addProductInCart(@PathVariable int userId, @PathVariable int productId) {
-        boolean productFound = false;
         List<Cart> allCartProducts = cartRepository.findAll();
         for (Cart c : allCartProducts) {
             if (c.getUser().getId() == userId && c.getProduct().getId() == productId) {
-                System.out.println("Product found in cart");
-                productFound = true;
-                break;
+                c.setAmount(c.getAmount() + 1);
+                return cartRepository.save(c);
             }
         }
-        if (!productFound) {
-            Cart cart = new Cart();
-            User user = userRepository.findById(userId);
-            cart.setUser(user);
-            user.addCart(cart);
-            Product product = productRepository.findById(productId);
-            cart.setProduct(product);
-            product.addCart(cart);
-            cart.setAmount(1);
-            System.out.println(cart.toString());
-            return cartRepository.save(cart);
+        Cart cart = new Cart();
+        User user = userRepository.findById(userId);
+        cart.setUser(user);
+        Product product = productRepository.findById(productId);
+        cart.setProduct(product);
+        cart.setAmount(1);
+        System.out.println(cart.toString());
+        return cartRepository.save(cart);
+    }
+
+    @DeleteMapping(value = "/api/carts/users/{userId}")
+    public void clearProductsInCart(@PathVariable int userId) {
+        System.out.println("Aruba");
+        List<Cart> productsInCart = this.getUserCart(userId);
+        for (Cart c : productsInCart) {
+            cartRepository.delete(c);
         }
-        return null;
     }
 }
