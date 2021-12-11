@@ -65,10 +65,24 @@ public class CartController {
 
     @DeleteMapping(value = "/api/carts/users/{userId}")
     public void clearProductsInCart(@PathVariable int userId) {
-        System.out.println("Aruba");
         List<Cart> productsInCart = this.getUserCart(userId);
         for (Cart c : productsInCart) {
             cartRepository.delete(c);
+        }
+    }
+
+    @DeleteMapping(value = "/api/carts/users/{userId}/products/{productId}")
+    public void deleteProductInCart(@PathVariable int userId, @PathVariable int productId) {
+        List<Cart> productsInCart = this.getUserCart(userId);
+        for (Cart c : productsInCart) {
+            if (productId == c.getProduct().getId()) {
+                c.setAmount(c.getAmount() - 1);
+                if (c.getAmount() == 0) {
+                    cartRepository.delete(c);
+                } else {
+                    cartRepository.save(c);
+                }
+            }
         }
     }
 }
