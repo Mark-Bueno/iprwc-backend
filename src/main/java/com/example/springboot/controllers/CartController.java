@@ -15,6 +15,7 @@ import java.util.List;
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @RestController
+@RequestMapping("api/carts")
 public class CartController {
 
     @Autowired
@@ -26,12 +27,8 @@ public class CartController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(value = "/api/carts")
-    public List<Cart> getCarts() {
-        return cartRepository.findAll();
-    }
 
-    @GetMapping(value = "/api/carts/users/{userId}")
+    @GetMapping(path = "{userId}")
     public List<Cart> getUserCart(@PathVariable int userId) {
         LOGGER.info("Fetching cart by user: " + userId);
         List<Cart> userCartProducts = new ArrayList<>();
@@ -44,7 +41,7 @@ public class CartController {
         return userCartProducts;
     }
 
-    @PostMapping(value = "/api/carts/users/{userId}/products/{productId}")
+    @PostMapping(value = "{userId}/{productId}")
     public Cart addProductInCart(@PathVariable int userId, @PathVariable int productId) {
         List<Cart> allCartProducts = cartRepository.findAll();
         for (Cart c : allCartProducts) {
@@ -63,7 +60,7 @@ public class CartController {
         return cartRepository.save(cart);
     }
 
-    @DeleteMapping(value = "/api/carts/users/{userId}")
+    @DeleteMapping(path = "{userId}")
     public void clearProductsInCart(@PathVariable int userId) {
         List<Cart> productsInCart = this.getUserCart(userId);
         for (Cart c : productsInCart) {
@@ -71,7 +68,7 @@ public class CartController {
         }
     }
 
-    @DeleteMapping(value = "/api/carts/users/{userId}/products/{productId}")
+    @DeleteMapping(path = "{userId}/{productId}")
     public void deleteProductInCart(@PathVariable int userId, @PathVariable int productId) {
         List<Cart> productsInCart = this.getUserCart(userId);
         for (Cart c : productsInCart) {

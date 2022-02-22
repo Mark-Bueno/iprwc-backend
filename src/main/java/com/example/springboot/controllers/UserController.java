@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
+@RequestMapping("api/users")
 public class UserController implements UserDetailsService {
 
     @Autowired
@@ -20,7 +21,7 @@ public class UserController implements UserDetailsService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @PostMapping(value = "/api/users", produces = "application/json")
+    @PostMapping(produces = "application/json")
     public User addUser(@RequestBody User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -35,8 +36,7 @@ public class UserController implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
-    @GetMapping("/api/users/{username}")
-    public User getUserByUsername(@PathVariable String username) {
+    public User getUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
         return user;
 

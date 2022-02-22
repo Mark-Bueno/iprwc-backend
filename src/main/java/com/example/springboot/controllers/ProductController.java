@@ -8,22 +8,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/products")
 public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
 
-    @GetMapping(value = "/api/products")
+    @GetMapping()
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
-    @GetMapping(value = "/api/products/{id}")
+    @GetMapping(path = "{id}")
     public Product getProduct(@PathVariable int id) {
         return productRepository.findById(id);
     }
 
-    @PostMapping(value = "/api/products", produces = "application/json")
+    @PostMapping(produces = "application/json")
     public Product addProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
