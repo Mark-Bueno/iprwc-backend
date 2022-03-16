@@ -3,6 +3,8 @@ package com.example.springboot.controllers;
 import com.example.springboot.models.User;
 import com.example.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,5 +42,12 @@ public class UserController implements UserDetailsService {
         User user = userRepository.findByUsername(username);
         return user;
 
+    }
+
+    @GetMapping(path = "authenticated")
+    public User getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = this.getUserByUsername(auth.getPrincipal().toString());
+        return user;
     }
 }
