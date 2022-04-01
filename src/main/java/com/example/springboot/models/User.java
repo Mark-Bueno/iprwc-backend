@@ -2,10 +2,6 @@ package com.example.springboot.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -16,7 +12,7 @@ public class User implements Serializable {
     @Column(name = "id")
     public int id;
 
-    @Column(name = "username", unique=true)
+    @Column(name = "username", unique = true)
     public String username;
 
     @Column(name = "password")

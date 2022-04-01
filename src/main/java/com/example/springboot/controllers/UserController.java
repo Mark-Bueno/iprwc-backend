@@ -1,6 +1,7 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.models.User;
+import com.example.springboot.models.UserPrincipal;
 import com.example.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,14 +12,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-
 @RestController
 @RequestMapping("api/users")
 public class UserController implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    public UserRepository userRepository;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -34,8 +33,7 @@ public class UserController implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) throw new UsernameNotFoundException(username);
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+        return new UserPrincipal(user);
     }
 
     public User getUserByUsername(String username) {
@@ -50,4 +48,5 @@ public class UserController implements UserDetailsService {
         User user = this.getUserByUsername(auth.getPrincipal().toString());
         return user;
     }
+
 }

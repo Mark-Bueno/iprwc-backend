@@ -4,6 +4,7 @@ import com.example.springboot.SpringApplicationContext;
 import com.example.springboot.controllers.CartController;
 import com.example.springboot.controllers.UserController;
 import com.example.springboot.models.LoginUser;
+import com.example.springboot.models.UserPrincipal;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +52,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String username = ((User) authResult.getPrincipal()).getUsername();
+        String username = ((UserPrincipal) authResult.getPrincipal()).getUsername();
         String token = Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))

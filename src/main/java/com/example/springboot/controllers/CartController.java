@@ -7,6 +7,8 @@ import com.example.springboot.repositories.CartRepository;
 import com.example.springboot.repositories.ProductRepository;
 import com.example.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,22 +29,23 @@ public class CartController {
     @Autowired
     private UserRepository userRepository;
 
-
-    @GetMapping(path = "{userId}")
-    public List<Cart> getUserCart(@PathVariable int userId) {
-        LOGGER.info("Fetching cart by user: " + userId);
+    //needs to be fixed
+    @GetMapping()
+    public List<Cart> getUserCart() {
+        User user = this.getCurrentUser();
         List<Cart> userCartProducts = new ArrayList<>();
         List<Cart> allCartProducts = cartRepository.findAll();
         for (Cart cart : allCartProducts) {
-            if (cart.getUser().getId() == userId) {
+            if (cart.getUser().getId() == user.getId()) {
                 userCartProducts.add(cart);
             }
         }
         return userCartProducts;
     }
 
-    @PostMapping(value = "{userId}/{productId}")
-    public Cart addProductInCart(@PathVariable int userId, @PathVariable int productId) {
+    @PostMapping(value = "{productId}")
+    public Cart addProductInCart(@PathVariable int productId) {
+        int userId = this.getCurrentUser().getId();
         List<Cart> allCartProducts = cartRepository.findAll();
         for (Cart c : allCartProducts) {
             if (c.getUser().getId() == userId && c.getProduct().getId() == productId) {
@@ -60,17 +63,17 @@ public class CartController {
         return cartRepository.save(cart);
     }
 
-    @DeleteMapping(path = "{userId}")
-    public void clearProductsInCart(@PathVariable int userId) {
-        List<Cart> productsInCart = this.getUserCart(userId);
+    @DeleteMapping()
+    public void clearProductsInCart() {
+        List<Cart> productsInCart = this.getUserCart();
         for (Cart c : productsInCart) {
             cartRepository.delete(c);
         }
     }
 
-    @DeleteMapping(path = "{userId}/{productId}")
-    public void deleteProductInCart(@PathVariable int userId, @PathVariable int productId) {
-        List<Cart> productsInCart = this.getUserCart(userId);
+    @DeleteMapping(path = "{productId}")
+    public void deleteProductInCart(@PathVariable int productId) {
+        List<Cart> productsInCart = this.getUserCart();
         for (Cart c : productsInCart) {
             if (productId == c.getProduct().getId()) {
                 c.setAmount(c.getAmount() - 1);
@@ -81,5 +84,11 @@ public class CartController {
                 }
             }
         }
+    }
+
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(auth.getPrincipal().toString());
+        return user;
     }
 }
