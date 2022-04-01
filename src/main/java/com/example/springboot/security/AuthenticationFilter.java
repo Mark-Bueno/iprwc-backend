@@ -65,5 +65,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.addHeader("Access-Control-Expose-Headers", "Authorization");
         response.addHeader("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header");
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        response.addHeader("Role", authResult.getAuthorities().iterator().next().toString());
     }
 }
