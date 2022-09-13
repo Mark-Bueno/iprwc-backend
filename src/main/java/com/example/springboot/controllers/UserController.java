@@ -49,4 +49,11 @@ public class UserController implements UserDetailsService {
         return user;
     }
 
+//    @GetMapping(path = "role")
+//    public String getRole() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String role = auth.getAuthorities().iterator().next().toString();
+//        return "{\"role\": " + role + "}";
+//    }
+
 }
