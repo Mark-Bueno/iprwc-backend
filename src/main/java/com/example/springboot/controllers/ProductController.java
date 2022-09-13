@@ -28,4 +28,10 @@ public class ProductController {
     public Product addProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
+
+    @DeleteMapping(path = "{id}")
+    public void deleteProduct(@PathVariable int id) {
+        Product product = productRepository.findById(id);
+        productRepository.delete(product);
+    }
 }
