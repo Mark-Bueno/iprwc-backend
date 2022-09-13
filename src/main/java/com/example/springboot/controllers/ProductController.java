@@ -3,6 +3,8 @@ package com.example.springboot.controllers;
 import com.example.springboot.models.Product;
 import com.example.springboot.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +26,19 @@ public class ProductController {
         return productRepository.findById(id);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PostMapping(produces = "application/json")
     public Product addProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
+    @PutMapping(produces = "application/json")
+    public Product editProduct(@RequestBody Product product) {
+        return productRepository.save(product);
+    }
+
+    @PreAuthorize("hasAuthority('admin')")
     @DeleteMapping(path = "{id}")
     public void deleteProduct(@PathVariable int id) {
         Product product = productRepository.findById(id);
