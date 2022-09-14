@@ -33,6 +33,13 @@ public class ProductController {
     }
 
     @PreAuthorize("hasAuthority('admin')")
+    @PostMapping(path = "copy", produces = "application/json")
+    public Product copyProduct(@RequestBody Product product) {
+        product.setId(0);
+        return productRepository.save(product);
+    }
+
+    @PreAuthorize("hasAuthority('admin')")
     @PutMapping(produces = "application/json")
     public Product editProduct(@RequestBody Product product) {
         return productRepository.save(product);
