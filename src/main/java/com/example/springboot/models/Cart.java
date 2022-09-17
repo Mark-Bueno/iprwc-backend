@@ -1,8 +1,5 @@
 package com.example.springboot.models;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,19 +10,19 @@ public class Cart implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    public int id;
 
     @ManyToOne()
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName="id")
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    public User user;
 
 
     @ManyToOne()
-    @JoinColumn(name = "product_id", nullable = false, referencedColumnName="id")
-    private Product product;
+    @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
+    public Product product;
 
     @Column(name = "amount")
-    private int amount;
+    public int amount;
 
     public int getId() {
         return id;

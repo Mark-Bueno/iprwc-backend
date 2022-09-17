@@ -29,10 +29,12 @@ public class CartController {
     @Autowired
     private UserRepository userRepository;
 
-    //needs to be fixed
+    @Autowired
+    private UserController userController;
+
     @GetMapping()
     public List<Cart> getUserCart() {
-        User user = this.getCurrentUser();
+        User user = this.userController.getAuthenticatedUser();
         List<Cart> userCartProducts = new ArrayList<>();
         List<Cart> allCartProducts = cartRepository.findAll();
         for (Cart cart : allCartProducts) {
@@ -45,7 +47,7 @@ public class CartController {
 
     @PostMapping(value = "{productId}")
     public Cart addProductInCart(@PathVariable int productId) {
-        int userId = this.getCurrentUser().getId();
+        int userId = this.userController.getAuthenticatedUser().getId();
         List<Cart> allCartProducts = cartRepository.findAll();
         for (Cart c : allCartProducts) {
             if (c.getUser().getId() == userId && c.getProduct().getId() == productId) {
@@ -84,11 +86,5 @@ public class CartController {
                 }
             }
         }
-    }
-
-    public User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(auth.getPrincipal().toString());
-        return user;
     }
 }

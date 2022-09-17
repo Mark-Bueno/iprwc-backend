@@ -35,6 +35,7 @@ public class Product implements Serializable {
     @JsonIgnore
     private List<Cart> carts = new ArrayList<>();
 
+
     public Integer getId() {
         return id;
     }
