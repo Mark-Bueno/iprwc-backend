@@ -1,9 +1,13 @@
 package com.example.springboot.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,8 +31,10 @@ public class Product implements Serializable {
     @Column(name = "description")
     public String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Set<Cart> carts = new HashSet<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Cart> carts = new ArrayList<>();
+
 
     public Integer getId() {
         return id;
@@ -70,10 +76,15 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public void addCart(Cart cart) {
-        if (cart != null) {
-            this.carts.add(cart);
-            cart.setProduct(this);
+    public List<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.carts.clear();
+        if (carts != null) {
+            this.carts.addAll(carts);
+            this.carts = carts;
         }
     }
 }

@@ -10,19 +10,19 @@ public class Cart implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    public int id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @ManyToOne()
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    public User user;
 
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @ManyToOne()
+    @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
+    public Product product;
 
     @Column(name = "amount")
-    private int amount;
+    public int amount;
 
     public int getId() {
         return id;
@@ -54,15 +54,5 @@ public class Cart implements Serializable {
 
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                ", user=" + user +
-                ", product=" + product +
-                ", amount=" + amount +
-                '}';
     }
 }

@@ -1,11 +1,11 @@
 package com.example.springboot.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -16,7 +16,7 @@ public class User implements Serializable {
     @Column(name = "id")
     public int id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     public String username;
 
     @Column(name = "password")
@@ -25,8 +25,9 @@ public class User implements Serializable {
     @Column(name = "role")
     public String role;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Cart> carts = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Cart> carts = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -60,12 +61,15 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public void addCart(Cart cart) {
-        if (cart != null) {
-            this.carts.add(cart);
-            cart.setUser(this);
-        }
+    public List<Cart> getCarts() {
+        return carts;
     }
 
-
+    public void setCarts(List<Cart> carts) {
+        this.carts.clear();
+        if (carts != null) {
+            this.carts.addAll(carts);
+            this.carts = carts;
+        }
+    }
 }
