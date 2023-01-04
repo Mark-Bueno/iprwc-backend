@@ -17,7 +17,7 @@ import java.util.List;
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @RestController
-@RequestMapping("api/carts")
+@RequestMapping("carts")
 public class CartController {
 
     @Autowired
